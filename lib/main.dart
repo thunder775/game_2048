@@ -59,10 +59,35 @@ class _MyHomePageState extends State<MyHomePage> {
     return board;
   }
 
+  Widget getRow(List<int> row) {
+    List<Widget> list = row.map((element) {
+      return Container(
+        height: 70,
+        width: 70,
+        color: Colors.orange.withOpacity(double.parse('0.$element')),
+        child: Center(
+          child: Text(
+            '$element',
+            style: TextStyle(
+                color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }).toList();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: list,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
         title: Center(child: Text("2048")),
       ),
       body: GestureDetector(
@@ -86,321 +111,25 @@ class _MyHomePageState extends State<MyHomePage> {
           logic.board = updateBoardLeftAndRight(logic.board, startX - endX);
           setState(() {});
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[0][0]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[0][1]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[0][2]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[0][3]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[1][0]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[1][1]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[1][2]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[1][3]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[2][0]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[2][1]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[2][2]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[2][3]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[3][0]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[3][1]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[3][2]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              '${logic.board[3][3]}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    getRow(logic.board[0]),
+                    getRow(logic.board[1]),
+                    getRow(logic.board[2]),
+                    getRow(logic.board[3]),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16, bottom: 16, top: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  FloatingActionButton(
-                    child: Icon(Icons.keyboard_arrow_up),
-                    onPressed: () {
-                      logic.board = logic.upSlideBoard(logic.board);
-                      logic.getRandomTwo(logic.board);
-                      setState(() {});
-                    },
-                    heroTag: "up",
-                  ),
-                  FloatingActionButton(
-                    child: Icon(Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      logic.board = logic.downSlideBoard(logic.board);
-                      logic.getRandomTwo(logic.board);
-                      setState(() {});
-                    },
-                    heroTag: "down",
-                  ),
-                  FloatingActionButton(
-                    child: Icon(Icons.chevron_left),
-                    onPressed: () {
-                      logic.board = logic.leftSlideBoard(logic.board);
-                      logic.getRandomTwo(logic.board);
-                      setState(() {});
-                    },
-                    heroTag: "left",
-                  ),
-                  FloatingActionButton(
-                    child: Icon(Icons.chevron_right),
-                    onPressed: () {
-                      logic.board = logic.rightSlideBoard(logic.board);
-                      logic.getRandomTwo(logic.board);
-                      setState(() {});
-                    },
-                    heroTag: "right",
-                  ),
-                ],
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-enum Moves { Right, Left, Up, Down }
