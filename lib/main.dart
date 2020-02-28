@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     print(logic.board);
+    logic.addRandomTwo(logic.board);
     // TODO: implement initState
     super.initState();
   }
@@ -37,25 +38,57 @@ class _MyHomePageState extends State<MyHomePage> {
   double startX;
   double endX;
 
-  List<List<int>> updateBoardUpAndDown(
-      List<List<int>> board, double difference) {
-    if (difference < 0) {
-      board = logic.downSlideBoard(board);
-    } else {
-      board = logic.upSlideBoard(board);
-    }
-    logic.getRandomTwo(board);
-    return board;
-  }
+  List<List<int>> updateBoard(List<List<int>> board, double differenceX,
+      double differenceY, BuildContext context) {
+    List<List<int>> beforeMove = List.from(board);
 
-  List<List<int>> updateBoardLeftAndRight(
-      List<List<int>> board, double difference) {
-    if (difference < 0) {
-      board = logic.rightSlideBoard(board);
+    if (differenceX.abs() > differenceY.abs()) {
+      if (differenceX < 0) {
+        board = logic.rightSlideBoard(board);
+      } else {
+        board = logic.leftSlideBoard(board);
+      }
     } else {
-      board = logic.leftSlideBoard(board);
+      if (differenceY < 0) {
+        board = logic.downSlideBoard(board);
+      } else {
+        board = logic.upSlideBoard(board);
+      }
     }
-    logic.getRandomTwo(board);
+    if (!logic.areMatricesEqual(beforeMove, board)) {
+      logic.addRandomTwo(board);
+    }
+    if (logic.isGameOver(board)) {
+      print('overrrrr');
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Game Over!"),
+              actions: <Widget>[
+                Center(
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      board = [
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0]
+                      ];
+                      logic.addRandomTwo(board);
+
+                    },
+                    label: Text("Try Again"),
+                    heroTag: "reset",
+                    backgroundColor: Colors.orange,
+                    icon: Icon(Icons.refresh),
+                  ),
+                )
+              ],
+            );
+          });
+    }
+    print(board);
     return board;
   }
 
@@ -91,24 +124,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Center(child: Text("2048")),
       ),
       body: GestureDetector(
-        onVerticalDragStart: (dre) {
+        onPanStart: (dre) {
+          startX = dre.globalPosition.dx;
           startY = dre.globalPosition.dy;
         },
-        onVerticalDragUpdate: (dre) {
+        onPanUpdate: (dre) {
+          endX = dre.globalPosition.dx;
           endY = dre.globalPosition.dy;
         },
-        onVerticalDragEnd: (dre) {
-          logic.board = updateBoardUpAndDown(logic.board, startY - endY);
-          setState(() {});
-        },
-        onHorizontalDragStart: (dre) {
-          startX = dre.globalPosition.dx;
-        },
-        onHorizontalDragUpdate: (dre) {
-          endX = dre.globalPosition.dx;
-        },
-        onHorizontalDragEnd: (dre) {
-          logic.board = updateBoardLeftAndRight(logic.board, startX - endX);
+        onPanEnd: (dre) {
+          logic.board =
+              updateBoard(logic.board, startX - endX, startY - endY, context);
           setState(() {});
         },
         child: Container(

@@ -65,25 +65,46 @@ class GameLogic {
     board = transpose(board);
     board = rightSlideBoard(board);
     board = transpose(board);
-    // board.forEach((row) => console.log(row));
     return board;
   }
 
-  bool isGameOver(matrix) {
-    bool result = true;
-    matrix.forEach((row) {
-      row.forEach((ele) {
-        if (ele == 0) {
-          result = false;
+  bool containsZero(List<List<int>> matrix) {
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[i].length; j++) {
+        if (board[i][j] == 0) {
+          return true;
         }
-      });
-    });
-    return result;
+      }
+    }
+    return false;
   }
 
+  bool areMovesAvailable(List<List<int>> matrix) {
+    List<List<int>> beforeMove = List.from(matrix);
+    matrix = leftSlideBoard(matrix);
+    matrix = rightSlideBoard(matrix);
+    matrix = upSlideBoard(matrix);
+    matrix = downSlideBoard(matrix);
+    return !areMatricesEqual(beforeMove, matrix);
+  }
+
+  bool areMatricesEqual(List<List<int>> matrix1, List<List<int>> matrix2) {
+    for (int i = 0; i < matrix1.length; i++) {
+      for (int j = 0; j < matrix1[i].length; j++) {
+        if (matrix1[i][j] != matrix2[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  bool isGameOver(List<List<int>> matrix) {
+    return areMovesAvailable(matrix) || containsZero(matrix) ? false : true;
+  }
   final _random = new Random();
 
-  void getRandomTwo(List<List<int>> board) {
+  void addRandomTwo(List<List<int>> board) {
     List<List<int>> potentialPlaces = [];
     for (int i = 0; i < board.length; i++) {
       for (int j = 0; j < board[i].length; j++) {
@@ -97,7 +118,6 @@ class GameLogic {
     }
     int randomIndex = _random.nextInt(potentialPlaces.length);
     board[potentialPlaces[randomIndex][0]][potentialPlaces[randomIndex][1]] = 2;
-    // return board;
   }
 
   bool isGameWon(matrix) {
