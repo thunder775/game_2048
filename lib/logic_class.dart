@@ -7,6 +7,7 @@ class GameLogic {
     [0, 0, 0, 0],
     [0, 0, 0, 0]
   ];
+  int moveCount = -1;
 
   List<int> leftSlide(List<int> row) {
     List<int> output = [];
@@ -42,28 +43,43 @@ class GameLogic {
     return output;
   }
 
-  List<List<int>> leftSlideBoard(List<List<int>> board) {
+//
+//  List<List<int>> leftSlideBoard(List<List<int>> board) {
+//    List<List<int>> output = [];
+//    board.forEach((row) => output.add(leftSlide(row)));
+//    return output;
+//  }
+//
+//  List<List<int>> rightSlideBoard(List<List<int>> board) {
+//    List<List<int>> output = [];
+//    board.forEach((row) => output.add(rightSlide(row)));
+//    return output;
+//  }
+
+  List<List<int>> performHorizontalMove(
+      List<List<int>> board, Function callback) {
     List<List<int>> output = [];
-    board.forEach((row) => output.add(leftSlide(row)));
+    board.forEach((row) => output.add(callback(row)));
     return output;
   }
 
-  List<List<int>> rightSlideBoard(List<List<int>> board) {
-    List<List<int>> output = [];
-    board.forEach((row) => output.add(rightSlide(row)));
-    return output;
-  }
-
-  List<List<int>> upSlideBoard(List<List<int>> board) {
+//  List<List<int>> upSlideBoard(List<List<int>> board) {
+//    board = transpose(board);
+//    board = performHorizontalMove(board, leftSlide);
+//    board = transpose(board);
+//    return board;
+//  }
+//
+//  List<List<int>> downSlideBoard(List<List<int>> board) {
+//    board = transpose(board);
+//    board = performHorizontalMove(board, rightSlide);
+//    board = transpose(board);
+//    return board;
+//  }
+  List<List<int>> performVerticalMove(
+      List<List<int>> board, Function callback) {
     board = transpose(board);
-    board = leftSlideBoard(board);
-    board = transpose(board);
-    return board;
-  }
-
-  List<List<int>> downSlideBoard(List<List<int>> board) {
-    board = transpose(board);
-    board = rightSlideBoard(board);
+    board = performHorizontalMove(board, callback);
     board = transpose(board);
     return board;
   }
@@ -81,10 +97,10 @@ class GameLogic {
 
   bool areMovesAvailable(List<List<int>> matrix) {
     List<List<int>> beforeMove = List.from(matrix);
-    matrix = leftSlideBoard(matrix);
-    matrix = rightSlideBoard(matrix);
-    matrix = upSlideBoard(matrix);
-    matrix = downSlideBoard(matrix);
+    matrix = performHorizontalMove(matrix, leftSlide);
+    matrix = performHorizontalMove(matrix, rightSlide);
+    matrix = performVerticalMove(matrix, rightSlide);
+    matrix = performVerticalMove(matrix, leftSlide);
     return !areMatricesEqual(beforeMove, matrix);
   }
 
@@ -99,9 +115,21 @@ class GameLogic {
     return true;
   }
 
+  void resetBoard() {
+    this.board = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+    ];
+    this.moveCount = -1;
+    addRandomTwo(this.board);
+  }
+
   bool isGameOver(List<List<int>> matrix) {
     return areMovesAvailable(matrix) || containsZero(matrix) ? false : true;
   }
+
   final _random = new Random();
 
   void addRandomTwo(List<List<int>> board) {
@@ -118,6 +146,7 @@ class GameLogic {
     }
     int randomIndex = _random.nextInt(potentialPlaces.length);
     board[potentialPlaces[randomIndex][0]][potentialPlaces[randomIndex][1]] = 2;
+    this.moveCount++;
   }
 
   bool isGameWon(matrix) {
@@ -131,17 +160,4 @@ class GameLogic {
     });
     return result;
   }
-}
-
-void main() {
-  GameLogic helper = GameLogic();
-  helper.transpose(helper.board);
-//  print(helper.leftSlide([2, 2, 2, 0]));
-//  print(helper.leftSlide([4, 0, 0, 4]));
-//  print(helper.leftSlide([2, 2, 4, 4, 8, 8]));
-//  print(helper.rightSlide([2, 2, 2, 0]));
-//  print(helper.rightSlide([4, 0, 0, 4]));
-//  print(helper.rightSlide([2, 2, 4, 4, 8, 8]));
-//  print(helper.rightSlide([8, 4, 4, 8]));
-//  print(helper.leftSlide([8, 4, 4, 8]));
 }

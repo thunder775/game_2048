@@ -27,7 +27,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    print(logic.board);
     logic.addRandomTwo(logic.board);
     // TODO: implement initState
     super.initState();
@@ -38,22 +37,16 @@ class _MyHomePageState extends State<MyHomePage> {
   double startX;
   double endX;
 
-  List<List<int>> updateBoard(List<List<int>> board, double differenceX,
-      double differenceY, BuildContext context) {
+  List<List<int>> updateBoard(
+      List<List<int>> board, double differenceX, double differenceY) {
     List<List<int>> beforeMove = List.from(board);
 
     if (differenceX.abs() > differenceY.abs()) {
-      if (differenceX < 0) {
-        board = logic.rightSlideBoard(board);
-      } else {
-        board = logic.leftSlideBoard(board);
-      }
+      board = logic.performHorizontalMove(
+          board, differenceX < 0 ? logic.rightSlide : logic.leftSlide);
     } else {
-      if (differenceY < 0) {
-        board = logic.downSlideBoard(board);
-      } else {
-        board = logic.upSlideBoard(board);
-      }
+      board = logic.performVerticalMove(
+          board, differenceY < 0 ? logic.rightSlide : logic.leftSlide);
     }
     if (!logic.areMatricesEqual(beforeMove, board)) {
       logic.addRandomTwo(board);
@@ -102,8 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
           endY = dre.globalPosition.dy;
         },
         onPanEnd: (dre) {
-          logic.board =
-              updateBoard(logic.board, startX - endX, startY - endY, context);
+          logic.board = updateBoard(logic.board, startX - endX, startY - endY);
           if (logic.isGameOver(logic.board)) {
             showDialog(
                 context: context,
@@ -114,13 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Center(
                         child: FloatingActionButton.extended(
                           onPressed: () {
-                            logic.board = [
-                              [0, 0, 0, 0],
-                              [0, 0, 0, 0],
-                              [0, 0, 0, 0],
-                              [0, 0, 0, 0]
-                            ];
-                            logic.addRandomTwo(logic.board);
+                            logic.resetBoard();
                             setState(() {});
                             Navigator.pop(context);
                           },
@@ -134,7 +120,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 });
           }
-
           setState(() {});
         },
         child: Container(
@@ -142,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Text('${logic.moveCount}'),
               Container(
                 child: Column(
                   children: <Widget>[
