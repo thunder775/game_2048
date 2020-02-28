@@ -58,37 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!logic.areMatricesEqual(beforeMove, board)) {
       logic.addRandomTwo(board);
     }
-    if (logic.isGameOver(board)) {
-      print('overrrrr');
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Game Over!"),
-              actions: <Widget>[
-                Center(
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      board = [
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0]
-                      ];
-                      logic.addRandomTwo(board);
-
-                    },
-                    label: Text("Try Again"),
-                    heroTag: "reset",
-                    backgroundColor: Colors.orange,
-                    icon: Icon(Icons.refresh),
-                  ),
-                )
-              ],
-            );
-          });
-    }
-    print(board);
     return board;
   }
 
@@ -135,6 +104,37 @@ class _MyHomePageState extends State<MyHomePage> {
         onPanEnd: (dre) {
           logic.board =
               updateBoard(logic.board, startX - endX, startY - endY, context);
+          if (logic.isGameOver(logic.board)) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Game Over!"),
+                    actions: <Widget>[
+                      Center(
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            logic.board = [
+                              [0, 0, 0, 0],
+                              [0, 0, 0, 0],
+                              [0, 0, 0, 0],
+                              [0, 0, 0, 0]
+                            ];
+                            logic.addRandomTwo(logic.board);
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                          label: Text("Try Again"),
+                          heroTag: "reset",
+                          backgroundColor: Colors.orange,
+                          icon: Icon(Icons.refresh),
+                        ),
+                      )
+                    ],
+                  );
+                });
+          }
+
           setState(() {});
         },
         child: Container(
