@@ -22,16 +22,25 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   GameLogic logic = GameLogic();
+  AnimationController animationController;
 
   @override
   void initState() {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     logic.addRandomTwo(logic.board);
-    // TODO: implement initState
+    animationController.addListener(() {
+      setState(() {});
+    });
+    animationController.forward();
     super.initState();
   }
 
+  Offset start = Offset(-4, 0);
+  Offset end = Offset(4, 0);
   double startY;
   double endY;
   double startX;
@@ -44,38 +53,28 @@ class _MyHomePageState extends State<MyHomePage> {
     if (differenceX.abs() > differenceY.abs()) {
       board = logic.performHorizontalMove(
           board, differenceX < 0 ? logic.rightSlide : logic.leftSlide);
+      if (differenceX < 0) {
+        start = Offset(-4, 0);
+        end = Offset(4, 0);
+      } else {
+        start = Offset(4, 0);
+        end = Offset(-4, 0);
+      }
     } else {
       board = logic.performVerticalMove(
           board, differenceY < 0 ? logic.rightSlide : logic.leftSlide);
+      if (differenceY < 0) {
+        start = Offset(0, -3);
+        end = Offset(0, 3);
+      } else {
+        start = Offset(0, 3);
+        end = Offset(0, -3);
+      }
     }
     if (!logic.areMatricesEqual(beforeMove, board)) {
       logic.addRandomTwo(board);
     }
     return board;
-  }
-
-  Widget getRow(List<int> row) {
-    List<Widget> list = row.map((element) {
-      return Container(
-        height: 70,
-        width: 70,
-        color: Colors.orange.withOpacity(double.parse('0.$element')),
-        child: Center(
-          child: Text(
-            '$element',
-            style: TextStyle(
-                color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-        ),
-      );
-    }).toList();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: list,
-      ),
-    );
   }
 
   @override
@@ -120,7 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 });
           }
-          setState(() {});
+          setState(() {
+            animationController.forward(from: 0);
+          });
         },
         child: Container(
           color: Colors.white,
@@ -131,10 +132,131 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    getRow(logic.board[0]),
-                    getRow(logic.board[1]),
-                    getRow(logic.board[2]),
-                    getRow(logic.board[3]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AnimatedContainer(
+                          element: logic.board[0][0],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[0][1],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[0][2],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[0][3],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AnimatedContainer(
+                          element: logic.board[1][0],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[1][1],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[1][2],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[1][3],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AnimatedContainer(
+                          element: logic.board[2][0],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[2][1],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[2][2],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[2][3],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AnimatedContainer(
+                          element: logic.board[3][0],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[3][1],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[3][2],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                        AnimatedContainer(
+                          element: logic.board[3][3],
+                          controller: animationController,
+                          end: end,
+                          start: start,
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -145,3 +267,88 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class AnimatedContainer extends StatefulWidget {
+  int element;
+  Offset start;
+  Offset end;
+  AnimationController controller;
+
+  AnimatedContainer({this.element, this.controller, this.end, this.start});
+
+  @override
+  _AnimatedContainerState createState() => _AnimatedContainerState();
+}
+
+class _AnimatedContainerState extends State<AnimatedContainer> {
+  int oldVal;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    oldVal = widget.element;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    widget.controller.addListener(() {
+      if (widget.controller.isCompleted) {
+        oldVal = widget.element;
+      }
+    });
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 70,
+        width: 70,
+        color: kColorsMap[widget.element],
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              SlideTransition(
+                position: Tween(begin: Offset(0, 0), end: widget.end).animate(
+                    CurvedAnimation(
+                        parent: widget.controller, curve: Curves.linear)),
+                child: Text(
+                  '$oldVal',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SlideTransition(
+                position: Tween(begin: widget.start, end: Offset(0, 0)).animate(
+                    CurvedAnimation(
+                        parent: widget.controller, curve: Curves.linear)),
+                child: Text(
+                  '${widget.element}',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Map<int, Color> kColorsMap = {
+  0: Colors.orange.shade100,
+  2: Colors.orange.shade200,
+  4: Colors.orange.shade300,
+  8: Colors.orange.shade400,
+  16: Colors.orange.shade500,
+  32: Colors.orange.shade600,
+  64: Colors.orange.shade600,
+  128: Colors.orange.shade700,
+  256: Colors.blue.shade700,
+  512: Colors.blue.shade800,
+  1024: Colors.blue.shade800,
+  2048: Colors.blue.shade900,
+};
