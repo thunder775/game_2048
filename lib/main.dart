@@ -124,11 +124,20 @@ class _MyHomePageState extends State<MyHomePage>
           });
         },
         child: Container(
-          color: Colors.white,
+          color: Color(0xFFBBADA0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('${logic.moveCount}'),
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 40,
+                    width: 80,
+                    color: Color(0xFFEEE1CB).withOpacity(.5),
+                    child: Text('${logic.moveCount}'),
+                  ),
+                ],
+              ),
               Container(
                 child: Column(
                   children: <Widget>[
@@ -339,7 +348,7 @@ class _AnimatedContainerState extends State<AnimatedContainer> {
 }
 
 Map<int, Color> kColorsMap = {
-  0: Colors.orange.shade100,
+  0: Colors.orange.shade100.withOpacity(.3),
   2: Colors.orange.shade200,
   4: Colors.orange.shade300,
   8: Colors.orange.shade400,
