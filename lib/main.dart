@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     logic.addRandomTwo(logic.board);
     animationController.addListener(() {
       setState(() {});
@@ -64,11 +64,11 @@ class _MyHomePageState extends State<MyHomePage>
       board = logic.performVerticalMove(
           board, differenceY < 0 ? logic.rightSlide : logic.leftSlide);
       if (differenceY < 0) {
-        start = Offset(0, -3);
-        end = Offset(0, 3);
+        start = Offset(0, -2);
+        end = Offset(0, 2);
       } else {
-        start = Offset(0, 3);
-        end = Offset(0, -3);
+        start = Offset(0, 2);
+        end = Offset(0, -2);
       }
     }
     if (!logic.areMatricesEqual(beforeMove, board)) {
@@ -130,11 +130,61 @@ class _MyHomePageState extends State<MyHomePage>
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Container(
-                    height: 40,
-                    width: 80,
-                    color: Color(0xFFEEE1CB).withOpacity(.5),
-                    child: Text('${logic.moveCount}'),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Moves Count',
+                            style: TextStyle(
+                                color: Color(0xFF3C1E1D), fontSize: 24)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            color: Color(0xFFEEE1CB).withOpacity(.5),
+                            child: Center(
+                              child: Text(
+                                '${logic.moveCount}',
+                                style: TextStyle(
+                                    color: Color(0xFF85583F),
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Score',
+                            style: TextStyle(
+                                color: Color(0xFF3C1E1D), fontSize: 24)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            color: Color(0xFFEEE1CB).withOpacity(.5),
+                            child: Center(
+                              child: Text(
+                                '${logic.getScore(logic.board)}',
+                                style: TextStyle(
+                                    color: Color(0xFF85583F),
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -296,16 +346,25 @@ class _AnimatedContainerState extends State<AnimatedContainer> {
   void initState() {
     // TODO: implement initState
     oldVal = widget.element;
+    widget.controller.addStatusListener(statusUpdate);
     super.initState();
+  }
+
+  void statusUpdate(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      oldVal = widget.element;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeStatusListener(statusUpdate);
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    widget.controller.addListener(() {
-      if (widget.controller.isCompleted) {
-        oldVal = widget.element;
-      }
-    });
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -322,7 +381,7 @@ class _AnimatedContainerState extends State<AnimatedContainer> {
                 child: Text(
                   '$oldVal',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xFF3C1E1D),
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
@@ -334,7 +393,7 @@ class _AnimatedContainerState extends State<AnimatedContainer> {
                 child: Text(
                   '${widget.element}',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xFF3C1E1D),
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
@@ -356,8 +415,8 @@ Map<int, Color> kColorsMap = {
   32: Colors.orange.shade600,
   64: Colors.orange.shade600,
   128: Colors.orange.shade700,
-  256: Colors.blue.shade700,
-  512: Colors.blue.shade800,
-  1024: Colors.blue.shade800,
-  2048: Colors.blue.shade900,
+  256: Colors.orange.shade700,
+  512: Colors.orange.shade800,
+  1024: Colors.orange.shade800,
+  2048: Colors.orange.shade900,
 };

@@ -25,6 +25,16 @@ class GameLogic {
     return output;
   }
 
+  int getScore(List<List<int>> board) {
+    int score = 0;
+    board.forEach((List<int> row) {
+      row.forEach((int ele) {
+        score += ele;
+      });
+    });
+    return score;
+  }
+
   List<int> rightSlide(List<int> row) {
     row = row.reversed.toList();
     row = leftSlide(row);
